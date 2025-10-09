@@ -30,6 +30,7 @@ execute:
 # Load the Dataset (1)
 
 ```{python}
+#| echo: true
 from pyspark.sql import SparkSession
 import pandas as pd
 import plotly.express as px
@@ -55,6 +56,7 @@ print(df.count())
 # Feature Engineering (2)
 
 ```{python}
+#| echo: true
 from pyspark.sql.functions import col, pow
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
@@ -106,6 +108,7 @@ print(missing_long)
 ## Chose Data (2.1)
 
 ```{python}
+#| echo: true
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
 ## Chose Categorial Columns and continuous 
@@ -130,6 +133,7 @@ df_eda = df.select(eda_cols)
 ## Missing Value Treatment (2.2)
 
 ```{python}
+#| echo: true
 from pyspark.sql.functions import col, when, isnan, count
 from pyspark.sql import Window
 from pyspark.sql.functions import col, when, isnan, count, expr, median
@@ -200,6 +204,7 @@ df_eda_clean = df_salary_imputed.withColumn("SALARY", when(col("SALARY").isNull(
 ### Drop rows with missing values (2.2.1)
 
 ```{python}
+#| echo: true
 # Drop rows with NA values in relevant columns
 # eda_cols = [
 #     "SALARY",
@@ -212,6 +217,37 @@ from pyspark.sql.types import IntegerType,DoubleType,DecimalType
 
 from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
+
+import pandas as pd
+import hvplot.pandas 
+
+
+# NULLS BEFORE
+df_before_pd = df.select(eda_cols).limit(2000).toPandas()
+missing_before = df_before_pd.isnull().reset_index().melt(id_vars='index', var_name='column', value_name='is_missing')
+missing_before["is_missing"] = missing_before["is_missing"].astype(int)
+heat_before = missing_before.hvplot.heatmap(
+    x="column", y="index", C="is_missing",
+    cmap="Reds", colorbar=False,
+    width=900, height=700,
+    title="Missing Values BEFORE cleaning"
+).opts(xrotation=45)
+# NULLS AFTER
+df_after_pd = df_eda_clean.select(eda_cols).limit(2000).toPandas()
+missing_after = df_after_pd.isnull().reset_index().melt(id_vars='index', var_name='column', value_name='is_missing')
+missing_after["is_missing"] = missing_after["is_missing"].astype(int)
+heat_after =missing_after.hvplot.heatmap(
+    x="column", y="index", C="is_missing",
+    cmap="Reds", colorbar=False,
+    width=900, height=700,
+    title="Missing Values AFTER cleaning"
+).opts(xrotation=45)
+display(heat_before)
+display(heat_after)
+
+
+
+
 
 spark = (
     SparkSession.builder
@@ -244,7 +280,7 @@ regression_df = regression_df.withColumn("DURATION", col("DURATION").cast(Intege
 
 ```{python}
 #| eval: true
-#| echo: false
+#| echo: true
 #| fig-align: center
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
@@ -287,6 +323,7 @@ regression_data.show(5, truncate=False)
 - Show the final structure of the DataFrame with the new features.
 
 ```{python}
+#| echo: true
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, VectorAssembler
 from pyspark.ml import Pipeline
@@ -311,6 +348,7 @@ regression_data_poly_final.select("SALARY", "features", "features_poly").show(5,
 # Train/Test Split (3)
 
 ```{python}
+#| echo: true
 # Split Data
 regression_train, regression_test = regression_data.randomSplit([0.8, 0.2], seed=42)
 print((regression_data.count(), len(regression_data.columns)))
@@ -331,6 +369,7 @@ print((regression_test.count(), len(regression_test.columns)))
 - Interpret the coefficients and their significance, and explain the model performance metrics.
 
 ```{python}
+#| echo: true
 from pyspark.ml.regression import GeneralizedLinearRegression 
 from pyspark.ml.regression import LinearRegression
 feature_names = assembler.getInputCols()
@@ -369,6 +408,7 @@ print("P Values:", [f"{val:.4f}" for val in summary.pValues])
 ```
 
 ```{python}
+#| echo: true
 # print(f"\nDispersion: {summary.dispersion:.4f}")
 print(f"R²: {summary.r2:.4f}")
 print(f"RMSE: {summary.rootMeanSquaredError:.4f}")
@@ -408,6 +448,7 @@ print("Length of pvals:", len(pvals))
 ```
 
 ```{python}
+#| echo: true
 import pandas as pd
 from tabulate import tabulate
 from IPython.display import HTML
@@ -445,6 +486,7 @@ In short, the model gives a general idea, but it’s not fine-tuned yet and need
 
 
 ```{python}
+#| echo: true
 from pyspark.ml.regression import GeneralizedLinearRegression
 
 feature_names = assembler.getInputCols()
@@ -527,6 +569,7 @@ HTML(coef_table.to_html())
 - Interpret the coefficients and their significance and explain the model performance metrics.
 
 ```{python}
+#| echo: true
 from pyspark.ml.regression import GeneralizedLinearRegression
 from pyspark.sql.functions import pow, col
 
@@ -637,6 +680,7 @@ HTML(coef_table.to_html())
 - remembernumber of trees and max depth are hyperparameters and roughly inversely proportional to each other.
 
 ```{python}
+#| echo: true
 from pyspark.ml.regression import RandomForestRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
 
@@ -705,6 +749,7 @@ print(rf_model.featureImportances)
 - Save the plot as rf_feature_importance.png in the _output/ folder.
 
 ```{python}
+#| echo: true
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -744,6 +789,7 @@ plt.show()
 # Compare 3 Models – GLR, Polynomial, RF (7)
 
 ```{python}
+#| echo: true
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -814,6 +860,7 @@ Log Likelihood is not directly available in PySpark’s GeneralizedLinearRegress
 
 
 ```{python}
+#| echo: true
 import numpy as np
 
 
