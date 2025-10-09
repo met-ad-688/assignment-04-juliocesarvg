@@ -8,3 +8,4 @@ glr_summary.csv
 lr_summary.csv
 poly_summary.csv
 
+quarto render assignment04-juliocesarvg.qmd

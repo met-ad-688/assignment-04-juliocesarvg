@@ -18,8 +18,10 @@ format:
     toc-depth: 2
 
 execute:
+  execute:
   echo: false
-  eval: false
+  eval: true
+  cache: false
   freeze: auto
 ---
 
@@ -86,10 +88,10 @@ df_eda = df_eda.withColumn(
 )
 
 # 0. Heatmap Before missing value treatment
-df_eda = df_eda.toPandas()
+df_eda_pd = df_eda.toPandas()
 
 # create new DataFrame where each cell missing (True) or not (False)
-missing_mask = df_eda.isnull()
+missing_mask = df_eda_pd.isnull()
 
 # Melt into long-form  | 4 columns: index, column, is_missing
 missing_long = (
@@ -233,6 +235,7 @@ regression_df = regression_df.withColumn("DURATION", col("DURATION").cast(Intege
 #regression_df.schema
 ```
 
+
 ## Convert, Assemble, Split, Pipeline (2.3 - 2.6)
 - Convert categorical variables into numerical representations using StringIndexer and OneHotEncoder.
 - Assemble features into a single vector using VectorAssembler.
@@ -278,6 +281,7 @@ print((regression_test.count(), len(regression_test.columns)))
 regression_data.show(5, truncate=False)
 ```
 
+
 - Create a new column MIN_YEARS_EXPERIENCE_SQ by squaring the MIN_YEARS_EXPERIENCE column.
 - Assemble the polynomial features into a new vector column features_poly using VectorAssembler.
 - Show the final structure of the DataFrame with the new features.
@@ -302,6 +306,7 @@ regression_data_poly_final=assembler_poly.transform(regression_data_poly)
 #show final structure
 regression_data_poly_final.select("SALARY", "features", "features_poly").show(5, truncate=False)
 ```
+
 
 # Train/Test Split (3)
 
@@ -836,4 +841,3 @@ print(f"Polynomial GLR -> Log-Likelihood: {loglik_poly:.2f},  BIC: {bic_poly:.2f
 ## Comments
 - The Polynomial GLR fits the data slightly better since it has a lower BIC value but both models perform almost equally well.
 - Overall, both GLR models provide a good fitbut the Polynomial GLR show a slightly better performance based on its lower BIC value.
-
