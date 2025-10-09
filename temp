@@ -2,3 +2,9 @@ Crear file _quarto.yml       requirements.txt      assignmente.qmd
 Crear folder data y output  y     figures
 
 quarto convert assignment04-juliocesarvg.qmd  -o  assignment04-juliocesarvg_sol.ipynb
+
+
+glr_summary.csv
+lr_summary.csv
+poly_summary.csv
+

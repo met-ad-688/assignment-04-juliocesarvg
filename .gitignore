@@ -144,7 +144,7 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
+
 
 # mypy
 .mypy_cache/
@@ -182,9 +182,13 @@ output/
 *.zip
 *.tgz
 *.svg
-*.png
+
 .vscode/
 .vscode-server/
 spark-*.tgz
 spark-*/
 *.deb
+
+!glr_summary.csv
+!lr_summary.csv
+!poly_summary.csv
