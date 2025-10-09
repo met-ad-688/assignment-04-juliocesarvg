@@ -3078,7 +3078,7 @@ Polynomial GLR -&gt; Log-Likelihood: -226314.10,  BIC: 452736.56</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/met-ad-688\.github\.io\/assignment-04-juliocesarvg\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

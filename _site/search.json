@@ -18,7 +18,7 @@
     "href": "assignment04-juliocesarvg_sol.html#missing-value-treatment-2.2",
     "title": "Assignment 04",
     "section": "2.2 Missing Value Treatment (2.2)",
-    "text": "2.2 Missing Value Treatment (2.2)\n\n\n                                                                                \n\n\n\n2.2.1 Drop rows with missing values (2.2.1)\n\n\n25/10/09 02:58:10 WARN SparkSession: Using an existing Spark session; only runtime SQL configurations will take effect."
+    "text": "2.2 Missing Value Treatment (2.2)\n\n\n                                                                                \n\n\n\n2.2.1 Drop rows with missing values (2.2.1)"
   },
   {
     "objectID": "assignment04-juliocesarvg_sol.html#convert-assemble-split-pipeline-2.3---2.6",
